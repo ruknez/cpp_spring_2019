@@ -68,6 +68,7 @@ std::set <int> eratosthenes () {
         }
     }
 
+    delete[] a;
     return simp_num;
 }
 
