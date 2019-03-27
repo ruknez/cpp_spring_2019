@@ -5,7 +5,7 @@ class Matrix {
     class Column {
         private: 
             int*  pRow = nullptr;
-            size_t cols;
+            size_t cols = 0;
         public:
             void SetParam (size_t cols_);
             const int& operator[](size_t i) const;
