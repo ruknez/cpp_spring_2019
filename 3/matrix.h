@@ -2,33 +2,35 @@
 #define __MATRIX__
 
 class Matrix {
-    class Array1 {
+    class Column {
         private: 
-            int*  pRow;
-            int cols;
+            int*  pRow = nullptr;
+            size_t cols = 0;
         public:
-            friend class Matrix;
-            const int& operator[](int i) const;
-            int& operator[] (int i);
-            Array1();
-            ~Array1();
+            void SetParam (size_t cols_);
+            const int& operator[](size_t i) const;
+            int& operator[] (size_t i);
+            int GetNumber (size_t num) const;
+            void SetNumber (size_t num, int val);
+            Column();
+            ~Column();
     };
 
     private:
-        Array1 *matrix;
-        int rows;
-        int cols;
+        Column *matrix;
+        size_t rows;
+        size_t cols;
 
     public:
-        explicit Matrix(int rows_, int cols_);
+        explicit Matrix(size_t rows_, size_t cols_);
 
         ~Matrix();
 
-        int getRows() const;
-        int getColumns() const;
+        size_t getRows() const;
+        size_t getColumns() const;
 
-        const Array1& operator [] (const int index) const;
-        Array1& operator [] (int index);
+        const Column& operator [] (const size_t index) const;
+        Column& operator [] (size_t index);
         bool operator == (const Matrix& m) const;
         bool operator != (const Matrix& m) const;
         Matrix& operator *= (const int num);

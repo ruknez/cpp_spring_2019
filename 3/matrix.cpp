@@ -1,22 +1,43 @@
-#include "matrix.h"
+
 #include <iostream>
 
-Matrix::Array1::Array1() {
-    pRow = nullptr;
-}
+#include "matrix.h"
+Matrix::Column::Column() {}
 
-Matrix::Array1::~Array1() {
+Matrix::Column::~Column() {
     delete[] pRow;
 }
 
-const int& Matrix::Array1::operator[](int i) const {
+void Matrix::Column::SetParam (size_t cols_) {
+   
+    if (pRow == nullptr) {
+        delete[] pRow;
+    }
+    pRow = new int [cols_];
+    cols = cols_;
+
+    for (size_t i = 0; i < cols; i++) {
+        pRow[i] = 0;
+    }
+
+}
+
+int Matrix::Column::GetNumber (size_t num) const {
+    return pRow [num];
+}
+
+void Matrix::Column::SetNumber (size_t num, int val) {
+    pRow[num] = val;
+}
+
+const int& Matrix::Column::operator[](size_t i) const {
     if (i >= cols) {
         throw std::out_of_range("");
         }
     return pRow[i];
 }
 
-int& Matrix::Array1::operator[] (int i) {
+int& Matrix::Column::operator[] (size_t i) {
     if (i >= cols) {
         throw std::out_of_range("");
     }
@@ -24,42 +45,34 @@ int& Matrix::Array1::operator[] (int i) {
 }
 
 
-Matrix::Matrix(int rows_, int cols_) {
+Matrix::Matrix(size_t rows_, size_t cols_) {
 
-    matrix = new Array1 [rows_];
+    matrix = new Column [rows_];
 
     rows = rows_;
     cols = cols_;
 
-    for (int i = 0; i < rows_; i++) {
-        matrix[i].cols = cols_;
-        matrix[i].pRow = new int [cols];
-    }
-
-    for (int i = 0; i < rows; i ++) {
-        for (int j = 0; j < cols; j++) {
-            matrix[i].pRow[j] = 0;
-        }
+    for (size_t i = 0; i < rows_; i++) {
+        matrix[i].SetParam(cols);
     }
 }
-
 
 Matrix::~Matrix() {
     delete[] matrix;
 }
 
-int Matrix::getRows() const {return rows;}
+size_t Matrix::getRows() const {return rows;}
 
-int Matrix::getColumns() const {return cols;}
+size_t Matrix::getColumns() const {return cols;}
 
-const Matrix::Array1& Matrix::operator [] (const int index) const {
+const Matrix::Column& Matrix::operator [] (const size_t index) const {
     if (index >= rows) {
         throw std::out_of_range("");
     }
     return matrix [index];
 }
 
-Matrix::Array1& Matrix::operator [] (int index) {
+Matrix::Column& Matrix::operator [] (size_t index) {
     if (index >= rows) {
         throw std::out_of_range("");
     }
@@ -76,9 +89,9 @@ Matrix::Array1& Matrix::operator [] (int index) {
         return false;
     }
 
-    for (int i = 0; i < rows; i++) {
-        for (int j = 0; j < cols; j++) {
-           if (matrix[i].pRow[j] != m [i][j]) {
+    for (size_t i = 0; i < rows; i++) {
+        for (size_t j = 0; j < cols; j++) {
+           if (matrix[i].GetNumber(j) != m [i][j]) {
                return false;
            }
         }
@@ -87,18 +100,15 @@ Matrix::Array1& Matrix::operator [] (int index) {
  }
  
 bool Matrix::operator != (const Matrix& m) const {
-    if (rows != m.getRows() || cols != m.getColumns()) {
-        return true;
-    }
 
     return !(*this == m);
 }
 
 Matrix& Matrix::operator *= (const int num) {
 
-    for (int i = 0; i < rows; i++) {
-        for (int j = 0; j < cols; j++) {
-           matrix[i].pRow[j] = matrix[i].pRow[j] * num;
+    for (size_t i = 0; i < rows; i++) {
+        for (size_t j = 0; j < cols; j++) {
+           matrix[i].SetNumber(j, matrix[i].GetNumber(j) * num);// = matrix[i].pRow[j] * num;
         }
     }
     return *this;
