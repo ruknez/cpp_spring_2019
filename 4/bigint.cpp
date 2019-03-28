@@ -116,7 +116,7 @@ BigInt BigInt::operator+(const BigInt& other) const {
         std::copy (ptr, ptr + tmp.length - 1, tmp.number);
         tmp.number [tmp.length -1]  = '1'; 
     }
-    
+
     return tmp;
 }
 

@@ -1,6 +1,5 @@
 #include "bigint.h"
 
-
 int main () {
 
     BigInt a("1233131414123456");
