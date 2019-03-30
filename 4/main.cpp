@@ -1,3 +1,5 @@
+#include <iostream>
+
 #include "bigint.h"
 
 int main () {
@@ -7,14 +9,29 @@ int main () {
     a.show();
 
     BigInt b = a;
-    b.show();
+    std::cout << b.show() << std::endl;
 
     BigInt c = 923461997;
-    c.show();
+    std::cout <<  c.show() << std::endl;
 
     BigInt d = 765431992;
     d = d + c;
 
-    d.show ();
+    d = a + 1;
+
+    a = 44444444;
+    d = 88888887;
+
+
+    std::cout << "d = " << d << "\na = " << a << std::endl;
+    std::cout << "c = " << c << std::endl;
+    
+    a = d + c + a;
+
+    std::cout << a << std::endl;
+    if (a < d) {
+        std::cout << "D < A \n";
+    }
+   // d.show ();
     return 0;
 }

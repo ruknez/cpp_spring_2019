@@ -37,12 +37,13 @@ BigInt::~BigInt () {
     delete [] number;
 }
 
-void BigInt::show ()const {
+std::string BigInt::show ()const {
 
+    std::string st = "";
     for (size_t i = 0; i < length; i++) {
-        std::cout << number[length - 1 - i];
+        st += number[length - 1 - i];
     }
-    std::cout << std::endl;
+    return st;
 }
 
 BigInt& BigInt::operator=(const BigInt& copied) {
@@ -75,19 +76,17 @@ int char_to_int (char ch) {
 
 BigInt BigInt::operator+(const BigInt& other) const {
     BigInt tmp;
-    
+
     if (other.length >= this->length) {
         tmp.length = other.length;
+        std::cout << __LINE__ << std::endl;
     } else {
         tmp.length = length;
     }
     
     tmp.number = new char [tmp.length];
 
-    std::cout << "other is = "; other.show(); 
-    std::cout << "this  is = "; this -> show(); 
-
-    int rem_div = (char_to_int(number[0]) + char_to_int(other.number[0])) / 10;
+    int rem_div = 0; //(char_to_int(number[0]) + char_to_int(other.number[0])) / 10;
 
     for (size_t i = 0; i < tmp.length; i++) {
         
@@ -101,13 +100,12 @@ BigInt BigInt::operator+(const BigInt& other) const {
             lval = char_to_int (number[i]);
         }
 
-        int int_div = (lval + rval) % 10;
-        tmp.number [i] = static_cast <char> (int_div + rem_div + 48);
-        rem_div = (lval + rval) / 10;
+        int int_div = (lval + rval + rem_div) % 10;
+        tmp.number [i] = static_cast <char> (int_div + 48);
+        rem_div = (lval + rval + rem_div) / 10;
     }
 
     if (rem_div) {
-
         char * ptr = new char [tmp.length];
         std::copy (tmp.number, tmp.number +tmp.length, ptr);
         delete [] tmp.number;
@@ -120,3 +118,103 @@ BigInt BigInt::operator+(const BigInt& other) const {
     return tmp;
 }
 
+bool BigInt::operator==(const BigInt& rhs) const {
+
+    if (this->length == rhs.length) {
+        for (size_t i = 0; i < this->length; i++) {
+            if (this->number[i] != rhs.number[i]) {
+                return false;
+            }
+        }
+        return true;
+    }
+    return false;
+}
+
+
+bool BigInt::operator<(const BigInt& rhs) const {
+
+    if (this->length < rhs.length) {
+        return true;
+    }
+    if (this->length > rhs.length || this == &rhs || *this == rhs) {
+        return false;
+    }
+    
+    if (this->length == rhs.length) {
+        for (int i = length -1; i >= 0; i--) {
+            if (number[i] < rhs.number[i]) {
+                return true;
+            } else if (number[i] > rhs.number[i]) {
+                return false;
+            }
+        }
+    }
+
+    return  true;
+}
+
+
+bool BigInt::operator>(const BigInt& rhs) const {
+    if (*this == rhs || *this < rhs) {
+        return false;
+    }
+    return true;
+}
+
+bool BigInt::operator<=(const BigInt& rhs) const {
+    if (*this == rhs || *this < rhs) {
+        return true;
+    }
+    return false;
+}
+
+bool BigInt::operator>=(const BigInt& rhs) const {
+    if (*this == rhs || *this > rhs) {
+        return true;
+    }
+    return false;
+}
+
+bool BigInt::operator!=(const BigInt& rhs) const {
+    if (*this == rhs) {
+        return false;
+    }
+    return true;
+}
+
+
+/*
+std::ostream& BigInt::operator << (std::ostream& stream) {
+    std::cout << "I am in BigInt::operator \n";
+    for (size_t i = 0; i < length; i++) {
+        stream << number[length - 1 - i];
+    }
+    return stream;
+}
+*/
+
+std::ostream& operator << (std::ostream& stream, const BigInt& bigint) {
+    stream << bigint.show ();
+    return stream;
+}
+
+/*
+BigInt BigInt::operator-(const BigInt& other) const {
+    BigInt tmp;
+
+    if (other.length >= this->length) {
+        tmp.length = other.length;
+    } else {
+        tmp.length = length;
+    }
+    
+    tmp.number = new char [tmp.length];
+
+    for (size_t i = 0; i < tmp.length; i++) {
+
+    }
+
+    return tmp;
+}
+*/

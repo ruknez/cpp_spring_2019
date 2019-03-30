@@ -16,13 +16,24 @@ class BigInt {
         BigInt(const int& copied);
         
         ~BigInt();
-        void show () const;
+        std::string show () const;
         BigInt& operator=(const BigInt& copied);
 
+
+
         BigInt operator+(const BigInt& other) const;
+        BigInt operator-(const BigInt& other) const;
+
+        bool operator==(const BigInt& rhs) const;
+        bool operator< (const BigInt& rhs) const;
+        bool operator> (const BigInt& rhs) const;
+        bool operator<=(const BigInt& rhs) const;
+        bool operator>=(const BigInt& rhs) const;
+        bool operator!=(const BigInt& rhs) const;
         
-
-
+        //std::ostream& operator << (std::ostream& stream);
 };
+
+std::ostream& operator << (std::ostream& stream, const BigInt& bigint);
 
 #endif
