@@ -7,12 +7,13 @@ class Matrix {
             int*  pRow = nullptr;
             size_t cols = 0;
         public:
-            void SetParam (size_t cols_);
             const int& operator[](size_t i) const;
             int& operator[] (size_t i);
             int GetNumber (size_t num) const;
             void SetNumber (size_t num, int val);
+        
             Column();
+            Column (size_t cols_);
             ~Column();
     };
 
@@ -20,7 +21,6 @@ class Matrix {
         Column *matrix;
         size_t rows;
         size_t cols;
-
     public:
         explicit Matrix(size_t rows_, size_t cols_);
 

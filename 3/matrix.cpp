@@ -1,25 +1,20 @@
-
 #include <iostream>
+#include <new> // Необходим для использования placement new
 
 #include "matrix.h"
 Matrix::Column::Column() {}
 
-Matrix::Column::~Column() {
-    delete[] pRow;
-}
-
-void Matrix::Column::SetParam (size_t cols_) {
-   
-    if (pRow == nullptr) {
-        delete[] pRow;
-    }
+Matrix::Column::Column(size_t cols_) {
     pRow = new int [cols_];
     cols = cols_;
 
     for (size_t i = 0; i < cols; i++) {
         pRow[i] = 0;
     }
+}
 
+Matrix::Column::~Column() {
+    delete[] pRow;
 }
 
 int Matrix::Column::GetNumber (size_t num) const {
@@ -47,18 +42,24 @@ int& Matrix::Column::operator[] (size_t i) {
 
 Matrix::Matrix(size_t rows_, size_t cols_) {
 
-    matrix = new Column [rows_];
-
     rows = rows_;
     cols = cols_;
 
-    for (size_t i = 0; i < rows_; i++) {
-        matrix[i].SetParam(cols);
+    matrix = static_cast<Column*>(operator new[] (rows_ * sizeof(Column)));
+
+    for (size_t i = 0; i < rows; i++) {
+        new (matrix + i) Column (cols);
     }
+
 }
 
 Matrix::~Matrix() {
-    delete[] matrix;
+
+    for (size_t i = 0; i < rows; i++) {
+        matrix[rows - 1 - i].~Column();
+    }
+
+   operator delete[] (matrix);
 }
 
 size_t Matrix::getRows() const {return rows;}
@@ -80,7 +81,7 @@ Matrix::Column& Matrix::operator [] (size_t index) {
 }
 
 
- bool Matrix::operator == (const Matrix& m) const {
+bool Matrix::operator == (const Matrix& m) const {
     if (this == &m) {
          return true;
     }
