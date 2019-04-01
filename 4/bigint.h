@@ -2,6 +2,10 @@
 #define __BIGINT__
 #include <iostream>
 
+#define ASKI_SHIFT 48 /*приведение char к int дает ASCII код символа, а не переводит '1' в 1 */
+
+// const int aski_shift = 48; /*приведение char к int дает ASCII код символа, а не переводит '1' в 1 */
+
 class BigInt {
     private:
         char * number = nullptr;
@@ -17,8 +21,8 @@ class BigInt {
         explicit BigInt(const std::string& st);
         
         BigInt(const BigInt& copied);
-        BigInt(const int& copied);
-        BigInt(const long& x);
+        BigInt(int copied);
+        BigInt(long x);
 
         ~BigInt();
         std::string show () const;

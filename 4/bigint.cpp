@@ -54,12 +54,12 @@ void BigInt::string_to_BigInt (const std::string& st) {
 BigInt::BigInt () {
     length = 1;
     number = new char [1];
-    number[0] = static_cast <char> (0 + 48);
+    number[0] = static_cast <char> (0 + ASKI_SHIFT);
     isNeg = false;
 
 }
 
-BigInt::BigInt(const long& x) {
+BigInt::BigInt(long x) {
     //this->isNeg = x < 0;
     string_to_BigInt (std::to_string (x));
 }
@@ -129,13 +129,13 @@ BigInt::BigInt(const BigInt& copied):number(new char [copied.length]),length(cop
     std::copy (copied.number, copied.number + length, number);
 }
 
-BigInt::BigInt(const int& copied) {
+BigInt::BigInt(int copied) {
     std::string st = std::to_string (copied);
     string_to_BigInt (st);
 }
 
 int char_to_int (char ch) {
-    return (static_cast<int> (ch) - 48);
+    return (static_cast<int> (ch) - ASKI_SHIFT);
 }
 
 BigInt BigInt::operator-() const {
@@ -169,7 +169,7 @@ BigInt BigInt::operator+(const BigInt& other) const {
             }
 
             int int_div = (lval + rval + rem_div) % 10;
-            tmp.number [i] = static_cast <char> (int_div + 48);
+            tmp.number [i] = static_cast <char> (int_div + ASKI_SHIFT);
             rem_div = (lval + rval + rem_div) / 10;
         }
 
@@ -311,7 +311,7 @@ BigInt BigInt::operator-(const BigInt& other) const {
             c[i + 1] = c[i] / 10;
             c[i] = c [i] % 10 + 0;
 
-            tmp.number[i] = static_cast <char>(c[i] + 48);
+            tmp.number[i] = static_cast <char>(c[i] + ASKI_SHIFT);
         }
 
         a[max_lenght - 1] += (max_lenght - 1 < len1) * (length > max_lenght-1)?char_to_int (number[max_lenght-1]):0;;
@@ -330,7 +330,7 @@ BigInt BigInt::operator-(const BigInt& other) const {
             tmp.length--;
         }
 */
-        tmp.number[max_lenght - 1] = static_cast <char>(c[max_lenght - 1] + 48);
+        tmp.number[max_lenght - 1] = static_cast <char>(c[max_lenght - 1] + ASKI_SHIFT);
         
 
         //del_zero(tmp);
