@@ -7,6 +7,10 @@ using std::size_t;
 #include "bigint.h"
 
 
+const int aski_shift = 48; /*приведение char к int дает ASCII код символа, а не переводит '1' в 1 */
+
+
+
 BigInt::BigInt (const std::string& st) {
     string_to_BigInt (st);
 }
@@ -54,7 +58,7 @@ void BigInt::string_to_BigInt (const std::string& st) {
 BigInt::BigInt () {
     length = 1;
     number = new char [1];
-    number[0] = static_cast <char> (0 + ASKI_SHIFT);
+    number[0] = static_cast <char> (0 + aski_shift);
     isNeg = false;
 
 }
@@ -135,7 +139,7 @@ BigInt::BigInt(int copied) {
 }
 
 int char_to_int (char ch) {
-    return (static_cast<int> (ch) - ASKI_SHIFT);
+    return (static_cast<int> (ch) - aski_shift);
 }
 
 BigInt BigInt::operator-() const {
@@ -169,7 +173,7 @@ BigInt BigInt::operator+(const BigInt& other) const {
             }
 
             int int_div = (lval + rval + rem_div) % 10;
-            tmp.number [i] = static_cast <char> (int_div + ASKI_SHIFT);
+            tmp.number [i] = static_cast <char> (int_div + aski_shift);
             rem_div = (lval + rval + rem_div) / 10;
         }
 
@@ -311,7 +315,7 @@ BigInt BigInt::operator-(const BigInt& other) const {
             c[i + 1] = c[i] / 10;
             c[i] = c [i] % 10 + 0;
 
-            tmp.number[i] = static_cast <char>(c[i] + ASKI_SHIFT);
+            tmp.number[i] = static_cast <char>(c[i] + aski_shift);
         }
 
         a[max_lenght - 1] += (max_lenght - 1 < len1) * (length > max_lenght-1)?char_to_int (number[max_lenght-1]):0;;
@@ -330,7 +334,7 @@ BigInt BigInt::operator-(const BigInt& other) const {
             tmp.length--;
         }
 */
-        tmp.number[max_lenght - 1] = static_cast <char>(c[max_lenght - 1] + ASKI_SHIFT);
+        tmp.number[max_lenght - 1] = static_cast <char>(c[max_lenght - 1] + aski_shift);
         
 
         //del_zero(tmp);

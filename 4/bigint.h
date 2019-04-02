@@ -2,10 +2,6 @@
 #define __BIGINT__
 #include <iostream>
 
-#define ASKI_SHIFT 48 /*приведение char к int дает ASCII код символа, а не переводит '1' в 1 */
-
-// const int aski_shift = 48; /*приведение char к int дает ASCII код символа, а не переводит '1' в 1 */
-
 class BigInt {
     private:
         char * number = nullptr;
