@@ -32,9 +32,9 @@ class Serializer {
 
         Error typedefimition (void* ptr);
 
-        Error typedefimition(bool* t);
+        Error typedefimition(bool& t);
 
-        Error typedefimition(uint64_t* t);
+        Error typedefimition(uint64_t& t);
 
         template <class T>
         void print(T&& val) {
@@ -43,7 +43,6 @@ class Serializer {
 
         template <class T, class... ArgsT>
         void print (T&& val, ArgsT&&... args);
-
 
 };
 
@@ -70,7 +69,7 @@ template <class T>
 Error Serializer::process (T&& val) {
     //int a = 0;
     //std::cout << std::is_same<std::typeof(a) uint64_t>::value << std::endl;   
-    return  typedefimition (&val);
+    return  typedefimition (std::forward<T>(val));
 }
 
 template <class T, class... ArgsT>
@@ -83,7 +82,7 @@ Error Serializer::process(T&& val, ArgsT&&...args) {
     std::cout << "std::typeid(a).name() = " << typeid(val).name() << std::endl;
     std::cout << "val process2 =  " << val << std::endl; 
 */
-    if (typedefimition (&val) == Error::CorruptedArchive) {
+    if (typedefimition (std::forward<T>(val)) == Error::CorruptedArchive) {
         return Error::CorruptedArchive;
     }
   //  print(args...);
@@ -94,9 +93,9 @@ Error Serializer::typedefimition (void* ptr) {
     return Error::CorruptedArchive;
 }
 
-Error Serializer::typedefimition(bool* t) {
+Error Serializer::typedefimition(bool& t) {
 
-    if (*t) {
+    if (t) {
         out_ << "true" << Separator;
     } else {
          out_ << "false" << Separator;
@@ -105,11 +104,9 @@ Error Serializer::typedefimition(bool* t) {
     return Error::NoError;
 }
 
-Error Serializer::typedefimition(uint64_t* t) {
-    out_ << *t << Separator;
+Error Serializer::typedefimition(uint64_t& t) {
+    out_ << t << Separator;
     return Error::NoError;
 }
-
-
 
 #endif

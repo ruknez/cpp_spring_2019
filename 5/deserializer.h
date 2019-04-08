@@ -19,18 +19,17 @@ class Deserializer {
         Error load(T& object);
 
         template <class... ArgsT>
-        Error operator()(ArgsT&... args);
+        Error operator()(ArgsT&&... args);
 
     private:
         template <class T>
-        Error process (T& val);
+        Error process (T&& val);
 
         template <class T, class... ArgsT>
-        Error process (T& val, ArgsT&&... args);
+        Error process (T&& val, ArgsT&&... args);
 
         Error deservalue (bool& value);
         Error deservalue (uint64_t& value);
-
 };
 
 
@@ -42,18 +41,18 @@ Error Deserializer::load(T& object) {
 }
 
 template <class... ArgsT>
-Error Deserializer::operator()(ArgsT&... args) {
-    return process(args...);
+Error Deserializer::operator()(ArgsT&&... args) {
+    return process(std::forward<ArgsT>(args)...);
 }
 
 template <class T>
-Error Deserializer::process (T& val) {
-    return deservalue (val);;
+Error Deserializer::process (T&& val) {
+    return deservalue (std::forward<T>(val));
 }
 
 template <class T, class... ArgsT>
-Error Deserializer::process (T& val, ArgsT&&... args) {
-    if (deservalue (val) == Error::CorruptedArchive) {
+Error Deserializer::process (T&& val, ArgsT&&... args) {
+    if (deservalue (std::forward<T>(val)) == Error::CorruptedArchive) {
         return Error::CorruptedArchive;
     }
     return  process (std::forward<ArgsT>(args)...);
@@ -87,7 +86,7 @@ Error Deserializer::deservalue (bool& value) {
     std::cout << std::numeric_limits<long long int>::min() << std::endl;
     std::cout << std::numeric_limits<long long int>::max() << std::endl << std::endl;
 */
-    value =  num ;//(text.c_str());
+    value =  num ;
 
     return Error::NoError;
 }
