@@ -1,0 +1,58 @@
+
+Deserializer::Deserializer (std::istream& in):in_(in) {}
+
+template <class T>
+Error Deserializer::load(T& object) {
+    return object.serialize (*this);
+}
+
+template <class... ArgsT>
+Error Deserializer::operator()(ArgsT&... args) {
+    return process(args...);
+}
+
+template <class T>
+Error Deserializer::process (T& val) {
+    return deservalue (val);;
+}
+
+template <class T, class... ArgsT>
+Error Deserializer::process (T& val, ArgsT&&... args) {
+    if (deservalue (val) == Error::CorruptedArchive) {
+        return Error::CorruptedArchive;
+    }
+    return  process (std::forward<ArgsT>(args)...);
+}
+
+Error Deserializer::deservalue (bool& value) {
+    std::string text;
+    in_ >> text;
+
+    if (text == "true")
+        value = true;
+    else if (text == "false")
+        value = false;
+    else
+        return Error::CorruptedArchive;
+
+    return Error::NoError;
+}
+
+ Error Deserializer::deservalue (uint64_t& value) {
+    long long int num;
+    in_ >> num;
+    
+    if (num < 0 || num > std::numeric_limits<uint64_t>::max()) {
+        return Error::CorruptedArchive;
+    }
+
+/*
+    std::cout << std::numeric_limits<uint64_t>::min() << std::endl;
+    std::cout << std::numeric_limits<uint64_t>::max() << std::endl << std::endl;
+    std::cout << std::numeric_limits<long long int>::min() << std::endl;
+    std::cout << std::numeric_limits<long long int>::max() << std::endl << std::endl;
+*/
+    value =  num ;//(text.c_str());
+
+    return Error::NoError;
+}
