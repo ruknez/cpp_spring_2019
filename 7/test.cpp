@@ -17,7 +17,8 @@ void ping(){
     condVar1.wait(lock, []{return dataReady == false;});
    // condVar1.wait (lck);
     dataReady= true;                          
-    std::cout << "ping" << std::endl;
+    //std::cout << "ping" << std::endl;
+    printf ("ping\n");
     condVar2.notify_one();                              
 
   }
@@ -30,7 +31,8 @@ void pong(){
     condVar2.wait(lck, []{return dataReady == true;});
     //condVar2.wait (lck);
     dataReady= false;
-    std::cout << "pong" << std::endl;
+    //std::cout << "pong" << std::endl;
+    printf ("pong\n");
     condVar1.notify_one();
   }
 
@@ -39,7 +41,7 @@ void pong(){
 int main(){
 
   //std::cout << std::boolalpha << std::endl;
-  
+
   std::thread t1(ping);
   std::thread t2(pong);
 
