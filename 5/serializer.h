@@ -20,7 +20,7 @@ class Serializer {
             Error save(T& object);
 
             template <class... ArgsT>
-            Error operator()(ArgsT... args);
+            Error operator()(ArgsT&&... args);
 
     private:
         template <class T>
@@ -55,8 +55,8 @@ Error Serializer::save(T& object) {
 
 
 template <class... ArgsT>
-Error Serializer::operator()(ArgsT... args) {
-    return process(args...);
+Error Serializer::operator()(ArgsT&&... args) {
+    return process(std::forward<ArgsT>(args)...);
 }
 
 template <class T, class... ArgsT>
